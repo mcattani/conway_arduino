@@ -15,7 +15,7 @@ Matriz matriz_actual;
 int generacion;
 
 // Control del intervalo entre generaciones.
-const unsigned long intervalo = 1000;
+const unsigned long intervalo = 500;
 unsigned long tiempo_anterior = 0;
 
 // Configuración del pulsador
