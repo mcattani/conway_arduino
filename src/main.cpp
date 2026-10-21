@@ -7,6 +7,7 @@
 #include <Arduino.h>
 #include "logica.h"
 #include "display.h"
+#include <Button2.h>
 
 // Estado actual del juego.
 Matriz matriz_actual;
@@ -16,22 +17,53 @@ int generacion;
 const unsigned long intervalo = 1000;
 unsigned long tiempo_anterior = 0;
 
-// Configuración y estado del botón para filtrar pulsaciones repetidas por rebote.
-const unsigned long debounce_push = 300;
-unsigned long tiempo_ultimo_push = 0;
+// Configuración del pulsador
 const byte PUSH_BUTTON = 2;
-volatile bool boton_pulsado = false; // Se modifica en la interrupción y se consulta en loop().
+Button2 pulsador;
 
-void pulsacion_boton()
+// Variables para el pulsador (tiempos de debounce y pulsación larga)
+const int debounce_push = 300;
+const int long_push = 800;
+
+/**
+ * @brief Función de callback para el pulsador (pulsación corta). Crea una matriz aleatoria nueva y la muestra.
+ *
+ */
+void pulsacion_corta(Button2 &btn)
 {
-  boton_pulsado = true;
+  matriz_actual = generar_matriz();
+  generacion = 0;
+  tiempo_anterior = millis();
+  mostrar_matriz(matriz_actual);
+  Serial.println("Nueva matriz generada");
+}
+
+/**
+ * @brief Función de callback para el pulsador (pulsación larga). Carga el preset de la matriz y la muestra.
+ *
+ */
+void pulsacion_larga(Button2 &btn)
+{
+  matriz_actual = generar_preset();
+  generacion = 0;
+  tiempo_anterior = millis();
+  mostrar_matriz(matriz_actual);
+  Serial.println("Preset cargado");
 }
 
 void setup()
 {
   Serial.begin(9600);
-  pinMode(PUSH_BUTTON, INPUT_PULLUP); // Activa la resistencia pull-up interna: el pin queda en HIGH y pasa a LOW al pulsar.
-  attachInterrupt(digitalPinToInterrupt(PUSH_BUTTON), pulsacion_boton, FALLING);
+
+  // Configuraciones del pulsador
+  pulsador.begin(PUSH_BUTTON);
+  pulsador.setDebounceTime(debounce_push);
+  pulsador.setLongClickTime(long_push);
+
+  // Registramos las funciones de callback del pulsador
+  pulsador.setClickHandler(pulsacion_corta);
+  pulsador.setLongClickDetectedHandler(pulsacion_larga);
+
   randomSeed(analogRead(A0)); // Usa la lectura de A0 para inicializar la secuencia aleatoria.
   iniciar_display();
 
@@ -45,29 +77,10 @@ void setup()
 
 void loop()
 {
-  // La interrupción marca la pulsación; loop() la acepta si pasó el tiempo de debounce.
-  if (boton_pulsado)
-  {
-    boton_pulsado = false;
-    unsigned long tiempo_push_actual = millis();
-    if (tiempo_push_actual - tiempo_ultimo_push >= debounce_push)
-    {
-      tiempo_ultimo_push = tiempo_push_actual;
-      matriz_actual = generar_matriz();
-      generacion = 0;
-      tiempo_anterior = millis();
-      mostrar_matriz(matriz_actual);
-      Serial.println("Nueva matriz generada");
-      return;
-    }
-  }
-
+  pulsador.loop();
   unsigned long tiempo_actual = millis();
-
-  // Avanza una generación cuando vence el intervalo.
   if (tiempo_actual - tiempo_anterior >= intervalo)
   {
-    tiempo_anterior = tiempo_actual;
     matriz_actual = siguiente_generacion(matriz_actual);
     generacion++;
     mostrar_matriz(matriz_actual);
