@@ -4,7 +4,7 @@
 
 # Juego de la Vida de Conway en Arduino
 
-Implementación del Juego de la Vida de Conway en un Arduino Nano y una matriz LED de 8×8 controlada por MAX7219. La simulación empieza con un tablero aleatorio, actualiza una generación por segundo y permite generar un tablero nuevo con un pulsador.
+Implementación del Juego de la Vida de Conway en un Arduino Nano y una matriz LED de 8×8 controlada por MAX7219. La simulación empieza con un tablero aleatorio y actualiza una generación por segundo. El pulsador permite generar otro tablero aleatorio con una pulsación corta o cargar un preset oscilador con una pulsación larga.
 
 Este proyecto lleva la secuencia de implementaciones de Conway desde la versión didáctica para consola hasta la interfaz gráfica con Pygame y, ahora, a un dispositivo físico:
 
@@ -17,7 +17,8 @@ Este proyecto lleva la secuencia de implementaciones de Conway desde la versión
 - Tablero de 8×8 con estado inicial aleatorio.
 - Reglas clásicas de Conway: nacimiento, supervivencia y muerte.
 - Evolución automática cada segundo.
-- Pulsador para generar una nueva matriz aleatoria y reiniciar el contador.
+- Pulsación corta para generar una nueva matriz aleatoria y reiniciar el contador de generaciones.
+- Pulsación larga para cargar un preset que oscila con un período de tres generaciones.
 - Generación actual informada por el monitor serie a 9600 baudios.
 - Bordes finitos: las celdas fuera de la matriz no se cuentan como vecinas.
 
@@ -47,7 +48,7 @@ El pulsador se conecta entre D2 y GND; no hace falta una resistencia pull-up ext
 - Arduino Nano clásico con ATmega328P.
 - Módulo MAX7219 y pulsador conectados según la tabla anterior.
 
-La dependencia `LedControl` se declara en `platformio.ini` y PlatformIO la instala al compilar.
+Las dependencias `LedControl` y `Button2` se declaran en `platformio.ini` y PlatformIO las instala al compilar.
 
 ## Compilar, cargar y monitor serie
 
@@ -75,7 +76,7 @@ pio device monitor --port /dev/ttyUSB0 --baud 9600
 
 En Linux, el puerto puede aparecer como `/dev/ttyUSB0` o `/dev/ttyACM0`; en otros sistemas, selecciona el puerto asignado por el sistema operativo.
 
-Al iniciar, la matriz muestra un tablero aleatorio y el monitor serie informa `Generación: 0`. Después, el contador avanza cada segundo. Pulsa el botón para crear otro tablero aleatorio y comenzar de nuevo desde la generación cero.
+Al iniciar, la matriz muestra un tablero aleatorio y el monitor serie informa `Generación: 0`. Después, el contador avanza cada segundo. Una pulsación corta crea otro tablero aleatorio; una pulsación larga carga el preset oscilador. Ambas acciones reinician el contador de generaciones. El monitor serie indica cuál de las dos acciones se realizó y continúa informando las generaciones a medida que avanza la simulación.
 
 ## Estructura del proyecto
 
