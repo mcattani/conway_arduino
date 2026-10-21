@@ -22,7 +22,7 @@ const byte PUSH_BUTTON = 2;
 Button2 pulsador;
 
 // Variables para el pulsador (tiempos de debounce y pulsación larga)
-const int debounce_push = 300;
+const int debounce_push = 50;
 const int long_push = 800;
 
 /**
@@ -82,6 +82,7 @@ void loop()
   if (tiempo_actual - tiempo_anterior >= intervalo)
   {
     matriz_actual = siguiente_generacion(matriz_actual);
+    tiempo_anterior = tiempo_actual;
     generacion++;
     mostrar_matriz(matriz_actual);
     Serial.print("Generación: ");

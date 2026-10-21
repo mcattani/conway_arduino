@@ -95,7 +95,7 @@ byte estado_proxima_generacion(byte estado_actual, byte vecinos_vivos)
 
 /**
  * @brief Función que calcula el siguiente estado de una matriz
- * 
+ *
  * @param matriz Matriz de la que se calcula el siguiente estado
  * @return Matriz Matriz con las reglas aplicadas
  */
@@ -115,4 +115,22 @@ Matriz siguiente_generacion(const Matriz &matriz)
     }
 
     return matriz_siguiente;
+}
+
+/**
+ * @brief Función que devuelve un preset para la matriz
+ *
+ * @return Matriz Matriz con los valores del preset
+ */
+Matriz generar_preset()
+{
+    Matriz matriz = {{{0, 0, 0, 0, 0, 0, 0, 0},
+                      {0, 0, 0, 0, 0, 1, 0, 0},
+                      {0, 0, 0, 0, 0, 1, 0, 0},
+                      {0, 0, 0, 0, 0, 1, 1, 0},
+                      {0, 0, 0, 0, 0, 0, 0, 0},
+                      {0, 1, 1, 1, 0, 0, 1, 1},
+                      {0, 0, 0, 1, 0, 1, 0, 1},
+                      {0, 0, 0, 0, 0, 1, 1, 0}}};
+    return matriz;
 }

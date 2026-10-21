@@ -9,3 +9,4 @@ struct Matriz
 
 Matriz generar_matriz();
 Matriz siguiente_generacion(const Matriz &matriz);
+Matriz generar_preset();
