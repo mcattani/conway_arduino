@@ -37,7 +37,7 @@ Matriz generar_matriz()
 }
 
 /**
- * @brief Función que determina la cantidad de vecinos vivos de una celda
+ * @brief Función que determina la cantidad de vecinos vivos de una célula
  *
  * @param matriz Matriz de la que se calcula el contador de vecinos vivos
  * @param fila Fila de la célula

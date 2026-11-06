@@ -1,6 +1,6 @@
 /**
  * Juego de la vida de Conway en un Arduino Nano con matriz LED MAX7219 de 8x8.
- * La matriz avanza cada segundo; una pulsación corta genera un tablero aleatorio
+ * La matriz avanza cada 500ms; una pulsación corta genera un tablero aleatorio
  * y una pulsación larga carga el preset oscilador de tres generaciones.
  * Publicado en: https://thenerdyapprentice.blogspot.com/
  */
